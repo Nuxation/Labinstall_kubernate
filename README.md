@@ -1,0 +1,1 @@
+# Labinstall_kubernate

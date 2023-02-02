@@ -1,0 +1,22 @@
+Vagrant.configure("2") do |config|
+    (1..2).each do |i|
+        config.vm.define "worker0#{i}" do |worker|
+            worker.vm.box_download_insecure = true
+            worker.vm.box = "centos/7"
+            worker.vm.network "private_network", ip: "100.0.0.2#{i}"
+            worker.vm.hostname = "worker0#{i}"
+            worker.vm.provider "virtualbox" do |v|
+                v.name ="worker0#{i}"
+                v.memory = 8192
+                v.cpus = 2
+            end
+	    config.vm.provision 'shell', reboot: true
+            config.vm.provision "shell", path: "./install_k8s.sh"
+       	    config.vm.provision "shell", path: "./etape3.sh"
+            config.vm.provision "shell", path: "./install_containerd.sh"
+            config.vm.provision "shell", path: "./etape5.sh"
+            config.vm.provision "shell", path: "./etape8.sh"
+        end
+    end
+end
+
